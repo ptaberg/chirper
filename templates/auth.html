@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+{{template "header" .}}
+<body>
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{.user.Photo}}" alt="Card image cap">
+    </div>
+    <h5 class="card-title">{{.user.FirstName}} {{.user.LastName}}</h5>
+    <p class="card-text">{{.user.City.Title}}</p>
+    <p>{{.status.Text}}</p>
+</body>
+</html>
