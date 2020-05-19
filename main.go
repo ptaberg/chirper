@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-vk-api/vk"
+	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	vkAuth "golang.org/x/oauth2/vk"
 )
@@ -30,11 +33,23 @@ type Status struct {
 }
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+
 	r := gin.Default()
+	path, exists := os.LookupEnv(".env")
+
+	if exists {
+		fmt.Print(path)
+	}
+
 	r.LoadHTMLGlob("templates/*")
+	fmt.Println(os.Getenv("CLIENT_ID"))
+
 	conf := &oauth2.Config{
-		ClientID:     "",
-		ClientSecret: "",
+		ClientID:     os.Getenv("CLIENT_ID"),
+		ClientSecret: os.Getenv("CLIENT_SECRET"),
 		RedirectURL:  "http://localhost:8090/auth",
 		Scopes:       []string{"photos", "status"},
 		Endpoint:     vkAuth.Endpoint,
@@ -70,6 +85,8 @@ func main() {
 
 		fmt.Println(user.ID)
 		fmt.Println(status)
+
+		time.Sleep(5 * time.Second)
 	})
 
 	r.Run(":8090")
